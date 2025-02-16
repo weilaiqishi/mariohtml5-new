@@ -31,35 +31,35 @@ export enum Keys {
     Left = 37,
     Up = 38,
     Right = 39,
-    Down = 40
+    Down = 40,
 }
 
 /**
  * Class that helps to manage keyboard input.
  */
 export class KeyboardInput {
-    private static pressed: { [key: number]: boolean } = {};
+    static Pressed: { [key: number]: boolean } = {};
 
-    static initialize(): void {
-        document.onkeydown = (event: KeyboardEvent) => this.keyDownEvent(event);
-        document.onkeyup = (event: KeyboardEvent) => this.keyUpEvent(event);
+    static Initialize(): void {
+        document.onkeydown = (event: KeyboardEvent) => this.KeyDownEvent(event);
+        document.onkeyup = (event: KeyboardEvent) => this.KeyUpEvent(event);
     }
 
-    static isKeyDown(key: Keys): boolean {
-        return !!this.pressed[key];
+    static IsKeyDown(key: Keys): boolean {
+        return !!this.Pressed[key];
     }
 
-    private static keyDownEvent(event: KeyboardEvent): void {
-        this.pressed[event.keyCode] = true;
-        this.preventScrolling(event);
+    static KeyDownEvent(event: KeyboardEvent): void {
+        this.Pressed[event.keyCode] = true;
+        this.PreventScrolling(event);
     }
 
-    private static keyUpEvent(event: KeyboardEvent): void {
-        this.pressed[event.keyCode] = false;
-        this.preventScrolling(event);
+    static KeyUpEvent(event: KeyboardEvent): void {
+        this.Pressed[event.keyCode] = false;
+        this.PreventScrolling(event);
     }
 
-    private static preventScrolling(event: KeyboardEvent): void {
+    static PreventScrolling(event: KeyboardEvent): void {
         if ([Keys.Left, Keys.Right, Keys.Up, Keys.Down].includes(event.keyCode)) {
             event.preventDefault();
         }

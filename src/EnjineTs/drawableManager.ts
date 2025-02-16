@@ -1,75 +1,75 @@
-import { GameContext, Camera } from './types';
-import { Drawable } from './drawable';
+import { GameContext, Camera } from "./types";
+import { DrawableType } from "./drawable";
 
 /**
  * Class to help manage and draw a collection of sprites.
  */
 export class DrawableManager {
-    private unsorted: boolean = true;
-    private objects: Drawable[] = [];
+    public Unsorted: boolean = true;
+    public Objects: DrawableType[] = [];
 
     /**
      * Add a single drawable object to the manager
      */
-    add(object: Drawable): void {
-        this.objects.push(object);
-        this.unsorted = true;
+    Add(object: DrawableType): void {
+        this.Objects.push(object);
+        this.Unsorted = true;
     }
 
     /**
      * Add multiple drawable objects to the manager
      */
-    addRange(objects: Drawable[]): void {
-        this.objects = this.objects.concat(objects);
-        this.unsorted = true;
+    AddRange(objects: DrawableType[]): void {
+        this.Objects = this.Objects.concat(objects);
+        this.Unsorted = true;
     }
 
     /**
      * Remove all objects from the manager
      */
-    clear(): void {
-        this.objects = [];
+    Clear(): void {
+        this.Objects = [];
     }
 
     /**
      * Check if the manager contains a specific object
      */
-    contains(obj: Drawable): boolean {
-        return this.objects.includes(obj);
+    Contains(obj: DrawableType): boolean {
+        return this.Objects.includes(obj);
     }
 
     /**
      * Remove a specific object from the manager
      */
-    remove(object: Drawable): void {
-        const index = this.objects.indexOf(object);
+    Remove(object: DrawableType): void {
+        const index = this.Objects.indexOf(object);
         if (index !== -1) {
-            this.objects.splice(index, 1);
+            this.Objects.splice(index, 1);
         }
     }
 
     /**
      * Remove an object at a specific index
      */
-    removeAt(index: number): void {
-        this.objects.splice(index, 1);
+    RemoveAt(index: number): void {
+        this.Objects.splice(index, 1);
     }
 
     /**
      * Remove a range of objects starting at index
      */
-    removeRange(index: number, length: number): void {
-        this.objects.splice(index, length);
+    RemoveRange(index: number, length: number): void {
+        this.Objects.splice(index, length);
     }
 
     /**
      * Remove a list of objects from the manager
      */
-    removeList(items: Drawable[]): void {
+    RemoveList(items: DrawableType[]): void {
         for (const item of items) {
-            const index = this.objects.indexOf(item);
+            const index = this.Objects.indexOf(item);
             if (index !== -1) {
-                this.objects.splice(index, 1);
+                this.Objects.splice(index, 1);
             }
         }
     }
@@ -77,10 +77,10 @@ export class DrawableManager {
     /**
      * Update all objects in the manager
      */
-    update(delta: number): void {
-        for (const obj of this.objects) {
-            if ('update' in obj && typeof (obj as any).update === 'function') {
-                (obj as any).update(delta);
+    Update(delta: number): void {
+        for (const obj of this.Objects) {
+            if ("Update" in obj && typeof (obj as any).Update === "function") {
+                (obj as any).Update(delta);
             }
         }
     }
@@ -88,15 +88,15 @@ export class DrawableManager {
     /**
      * Draw all objects in the manager
      */
-    draw(context: GameContext, camera: Camera): void {
-        if (this.unsorted) {
+    Draw(context: GameContext, camera: Camera): void {
+        if (this.Unsorted) {
             // Sort objects by their Z order
-            this.objects.sort((a, b) => a.ZOrder - b.ZOrder);
-            this.unsorted = false;
+            this.Objects.sort((a, b) => a.ZOrder - b.ZOrder);
+            this.Unsorted = false;
         }
 
-        for (const obj of this.objects) {
-            obj.draw(context, camera);
+        for (const obj of this.Objects) {
+            obj.Draw(context, camera);
         }
     }
 }

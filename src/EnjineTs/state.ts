@@ -1,64 +1,60 @@
-import { GameContext } from './types';
+import { GameContext } from "./types";
 
 /**
  * Base game state interface that all game states must implement
  */
 export interface IGameState {
-    enter(): void;
-    exit(): void;
-    update(delta: number): void;
-    draw(context: GameContext): void;
-    checkForChange(context: GameStateContext): void;
+    Enter(): void;
+    Exit(): void;
+    Update(delta: number): void;
+    Draw(context: GameContext): void;
+    CheckForChange(context: GameStateContext): void;
 }
 
 /**
  * Base game state class that provides empty implementations of all required methods
  */
 export abstract class GameState implements IGameState {
-    enter(): void {}
-    exit(): void {}
-    update(delta: number): void {}
-    draw(context: GameContext): void {}
-    checkForChange(context: GameStateContext): void {}
+    Enter(): void {}
+    Exit(): void {}
+    Update(delta: number): void {}
+    Draw(context: GameContext): void {}
+    CheckForChange(context: GameStateContext): void {}
 }
 
 /**
  * Game state context that manages the current state and state transitions
  */
 export class GameStateContext {
-    private currentState: IGameState | null = null;
+    State: any = null;
 
-    constructor(defaultState?: IGameState) {
+    constructor(defaultState?: any) {
         if (defaultState) {
-            this.currentState = defaultState;
-            this.currentState.enter();
+            this.State = defaultState;
+            this.State.Enter();
         }
     }
 
-    get state(): IGameState | null {
-        return this.currentState;
+    ChangeState(newState: IGameState): void {
+        if (this.State) {
+            this.State.Exit();
+        }
+        this.State = newState;
+        this.State.Enter();
     }
 
-    changeState(newState: IGameState): void {
-        if (this.currentState) {
-            this.currentState.exit();
+    Update(delta: number): void {
+        if (!this.State) {
+            throw new Error("No current state to update");
         }
-        this.currentState = newState;
-        this.currentState.enter();
+        this.State.CheckForChange(this);
+        this.State.Update(delta);
     }
 
-    update(delta: number): void {
-        if (!this.currentState) {
-            throw new Error('No current state to update');
+    Draw(context: GameContext): void {
+        if (!this.State) {
+            throw new Error("No current state to draw");
         }
-        this.currentState.checkForChange(this);
-        this.currentState.update(delta);
-    }
-
-    draw(context: GameContext): void {
-        if (!this.currentState) {
-            throw new Error('No current state to draw');
-        }
-        this.currentState.draw(context);
+        this.State.Draw(context);
     }
 }

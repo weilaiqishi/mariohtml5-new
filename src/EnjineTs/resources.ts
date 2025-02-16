@@ -1,5 +1,6 @@
 /**
  * Resource manager for images and sounds
+ * Code by Rob Kleffner, 2011
  */
 
 interface ImageResource {
@@ -7,116 +8,119 @@ interface ImageResource {
     src: string;
 }
 
-interface SoundChannel extends HTMLAudioElement {
-    index?: number;
-}
-
 interface SoundCollection {
-    [key: string]: SoundChannel[];
-    index?: number;
+    [key: string]: HTMLAudioElement[];
 }
 
 export class Resources {
-    private static images: { [key: string]: HTMLImageElement } = {};
-    private static sounds: SoundCollection = {};
+    static Images: { [key: string]: HTMLImageElement } = {};
+    static Sounds: SoundCollection = {};
 
-    static destroy(): void {
-        this.images = {};
-        this.sounds = {};
+    static Destroy(): Resources {
+        this.Images = {};
+        this.Sounds = {};
+        return this;
     }
 
     // Image Management
-    static addImage(name: string, src: string): void {
+    static AddImage(name: string, src: string): Resources {
         const tempImage = new Image();
-        this.images[name] = tempImage;
+        this.Images[name] = tempImage;
         tempImage.src = src;
+        return this;
     }
 
-    static addImages(array: ImageResource[]): void {
-        array.forEach(({name, src}) => {
+    static AddImages(array: ImageResource[]): Resources {
+        array.forEach(({ name, src }) => {
             const tempImage = new Image();
-            this.images[name] = tempImage;
+            this.Images[name] = tempImage;
             tempImage.src = src;
         });
+        return this;
     }
 
-    static clearImages(): void {
-        this.images = {};
+    static ClearImages(): Resources {
+        this.Images = {};
+        return this;
     }
 
-    static removeImage(name: string): void {
-        delete this.images[name];
-    }
-
-    static getImage(name: string): HTMLImageElement | undefined {
-        return this.images[name];
+    static RemoveImage(name: string): Resources {
+        delete this.Images[name];
+        return this;
     }
 
     // Sound Management
-    static addSound(name: string, src: string, maxChannels: number = 3): void {
-        this.sounds[name] = [];
-        this.sounds.index = 0;
-        
-        for (let i = 0; i < maxChannels; i++) {
-            const audio = new Audio(src) as SoundChannel;
-            audio.index = i;
-            this.sounds[name][i] = audio;
+    static AddSound(name: string, src: string, maxChannels: number = 3): Resources {
+        this.Sounds[name] = [];
+        this.Sounds[name].index = 0;
+        if (!maxChannels) {
+        	maxChannels = 3;
+        }
+        for (var i = 0; i < maxChannels; i++) {
+        	this.Sounds[name][i] = new Audio(src);	
+        }
+        return this;
+    }
+
+    static ClearSounds(): Resources {
+        this.Sounds = {};
+        return this;
+    }
+
+    static RemoveSound(name: string): Resources {
+        delete this.Sounds[name];
+        return this;
+    }
+
+    static PlaySound(name: string, loop: boolean = false): number {
+    	if (this.Sounds[name].index >= this.Sounds[name].length) {
+    		this.Sounds[name].index = 0;	
+    	}
+    	if (loop) {
+    		this.Sounds[name][this.Sounds[name].index].addEventListener("ended", this.LoopCallback, false);
+    	}
+    	this.Sounds[name][this.Sounds[name].index++].play();
+    	return this.Sounds[name].index;
+    }
+
+    static PauseChannel(name: string, index: number): Resources {
+    	if (!this.Sounds[name][index].paused) {
+    		this.Sounds[name][index].pause();
+    	}
+    	return this;
+    }
+
+    static PauseSound(name: string): Resources {
+    	for (var i = 0; i < this.Sounds[name].length; i++) {
+    		if (!this.Sounds[name][i].paused) {
+    			this.Sounds[name][i].pause();
+    		}
+    	}
+    	return this;
+    }
+
+    static ResetChannel(name: string, index: number): Resources {
+    	this.Sounds[name][index].currentTime = 0;
+    	this.StopLoop(name, index);
+    	return this;
+    }
+
+    static ResetSound(name: string): Resources {
+    	for (var i = 0; i < this.Sounds[name].length; i++) {
+    		this.Sounds[name].currentTime = 0;
+    		this.StopLoop(name, i);
+    	}
+    	return this;
+    }
+
+    static StopLoop(name: string, index: number): void {
+        if (this.Sounds[name] && this.Sounds[name][index]) {
+            this.Sounds[name][index].removeEventListener("ended", this.LoopCallback, false);
         }
     }
 
-    static clearSounds(): void {
-        this.sounds = {};
-    }
-
-    static removeSound(name: string): void {
-        delete this.sounds[name];
-    }
-
-    static playSound(name: string, loop: boolean = false): void {
-        if (!this.sounds[name]) return;
-        
-        const soundArray = this.sounds[name];
-        const soundChannel = soundArray[this.sounds.index || 0];
-        
-        if (soundChannel) {
-            soundChannel.loop = loop;
-            soundChannel.play();
-            this.sounds.index = (this.sounds.index || 0 + 1) % soundArray.length;
-        }
-    }
-
-    static pauseChannel(name: string, index: number): void {
-        if (this.sounds[name] && this.sounds[name][index]) {
-            this.sounds[name][index].pause();
-        }
-    }
-
-    static pauseSound(name: string): void {
-        if (!this.sounds[name]) return;
-        
-        const soundArray = this.sounds[name];
-        soundArray.forEach(channel => channel.pause());
-    }
-
-    static resetChannel(name: string, index: number): void {
-        if (this.sounds[name] && this.sounds[name][index]) {
-            this.sounds[name][index].currentTime = 0;
-        }
-    }
-
-    static resetSound(name: string): void {
-        if (!this.sounds[name]) return;
-        
-        const soundArray = this.sounds[name];
-        soundArray.forEach(channel => {
-            channel.pause();
-            channel.currentTime = 0;
-        });
-    }
-
-    static stopLoop(name: string, index: number): void {
-        if (this.sounds[name] && this.sounds[name][index]) {
-            this.sounds[name][index].loop = false;
-        }
+    private static LoopCallback(this: HTMLAudioElement): void {
+        this.currentTime = -1;
+        this.play();
     }
 }

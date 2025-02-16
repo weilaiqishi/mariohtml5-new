@@ -1,5 +1,5 @@
-import { GameContext, Camera, Point } from './types';
-import { Drawable } from './drawable';
+import { GameContext, Camera } from "./types";
+import { Drawable } from "./drawable";
 
 /**
  * Interface for font string data
@@ -22,74 +22,26 @@ interface LetterPosition {
  * Represents a sprite sheet for a font.
  */
 export class SpriteFont extends Drawable {
-    private image: HTMLImageElement;
-    private letters: { [key: number]: LetterPosition };
-    private letterWidth: number;
-    private letterHeight: number;
-    private strings: FontString[];
+    Image: HTMLImageElement;
+    Letters: { [key: number]: LetterPosition };
+    LetterWidth: number;
+    LetterHeight: number;
+    Strings: FontString[];
 
-    constructor(
-        strings: FontString[],
-        image: HTMLImageElement,
-        letterWidth: number,
-        letterHeight: number,
-        letters: { [key: number]: LetterPosition }
-    ) {
+    constructor(strings: FontString[], image: HTMLImageElement, letterWidth: number, letterHeight: number, letters: { [key: number]: LetterPosition }) {
         super();
-        this.strings = strings;
-        this.image = image;
-        this.letterWidth = letterWidth;
-        this.letterHeight = letterHeight;
-        this.letters = letters;
+        this.Image = image;
+        this.Letters = letters;
+        this.LetterWidth = letterWidth;
+        this.LetterHeight = letterHeight;
+        this.Strings = strings;
     }
 
-    get Strings(): FontString[] {
-        return this.strings;
-    }
-
-    set Strings(value: FontString[]) {
-        this.strings = value;
-    }
-
-    get Image(): HTMLImageElement {
-        return this.image;
-    }
-
-    set Image(value: HTMLImageElement) {
-        this.image = value;
-    }
-
-    get Letters(): { [key: number]: LetterPosition } {
-        return this.letters;
-    }
-
-    get LetterWidth(): number {
-        return this.letterWidth;
-    }
-
-    get LetterHeight(): number {
-        return this.letterHeight;
-    }
-
-    override draw(context: GameContext, camera: Camera): void {
-        for (const string of this.strings) {
+    override Draw(context: GameContext, camera: Camera): void {
+        for (const string of this.Strings) {
             for (let i = 0; i < string.String.length; i++) {
                 const code = string.String.charCodeAt(i);
-                const letter = this.letters[code];
-                
-                if (letter) {
-                    context.drawImage(
-                        this.image,
-                        letter.X,
-                        letter.Y,
-                        this.letterWidth,
-                        this.letterHeight,
-                        string.X + this.letterWidth * (i + 1),
-                        string.Y,
-                        this.letterWidth,
-                        this.letterHeight
-                    );
-                }
+                context.drawImage(this.Image, this.Letters[code].X, this.Letters[code].Y, this.LetterWidth, this.LetterHeight, string.X + this.LetterWidth * (i + 1), string.Y, this.LetterWidth, this.LetterHeight);
             }
         }
     }

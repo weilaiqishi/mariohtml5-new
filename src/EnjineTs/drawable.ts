@@ -1,18 +1,12 @@
-import { GameContext, Camera } from './types';
+import { GameContext, Camera } from "./types";
 
 /**
  * Base class for all drawable objects, makes ordering automatic.
  */
 export abstract class Drawable {
-    protected zOrder: number = 0;
+    public ZOrder: number = 0;
 
-    get ZOrder(): number {
-        return this.zOrder;
-    }
-
-    set ZOrder(value: number) {
-        this.zOrder = value;
-    }
-
-    abstract draw(context: GameContext, camera?: Camera): void;
+    abstract Draw(context: GameContext, camera?: Camera): void;
 }
+
+export type DrawableType = any;

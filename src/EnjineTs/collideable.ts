@@ -15,56 +15,35 @@ export type CollisionEventHandler = (other: Collideable) => void;
  * Basic bounding box collision object.
  */
 export class Collideable {
-    private x: number;
-    private y: number;
-    private width: number;
-    private height: number;
-    private base: IPositionable;
-    private collisionEvent: CollisionEventHandler;
+    private Base: IPositionable;
+    private X: number;
+    private Y: number;
+    private Width: number;
+    private Height: number;
+    private CollisionEvent: CollisionEventHandler;
 
-    constructor(
-        obj: IPositionable,
-        width: number,
-        height: number,
-        collisionEvent?: CollisionEventHandler
-    ) {
-        this.base = obj;
-        this.x = obj.X;
-        this.y = obj.Y;
-        this.width = width;
-        this.height = height;
-        this.collisionEvent = collisionEvent || (() => {});
+    constructor(obj: IPositionable, width: number, height: number, collisionEvent?: CollisionEventHandler) {
+        this.Base = obj;
+        this.X = obj.X;
+        this.Y = obj.Y;
+        this.Width = width;
+        this.Height = height;
+        this.CollisionEvent = collisionEvent || (() => {});
     }
 
-    get X(): number {
-        return this.x;
+    Update(): void {
+        this.X = this.Base.X;
+        this.Y = this.Base.Y;
     }
 
-    get Y(): number {
-        return this.y;
-    }
-
-    get Width(): number {
-        return this.width;
-    }
-
-    get Height(): number {
-        return this.height;
-    }
-
-    update(): void {
-        this.x = this.base.X;
-        this.y = this.base.Y;
-    }
-
-    checkCollision(other: Collideable): void {
-        const left1 = this.x;
+    CheckCollision(other: Collideable): void {
+        const left1 = this.X;
         const left2 = other.X;
-        const right1 = this.x + this.width;
+        const right1 = this.X + this.Width;
         const right2 = other.X + other.Width;
-        const top1 = this.y;
+        const top1 = this.Y;
         const top2 = other.Y;
-        const bottom1 = this.y + this.height;
+        const bottom1 = this.Y + this.Height;
         const bottom2 = other.Y + other.Height;
 
         // No collision cases
@@ -74,7 +53,7 @@ export class Collideable {
         if (left1 > right2) return;
 
         // Collision detected, fire the events!
-        this.collisionEvent(other);
-        other.collisionEvent(this);
+        this.CollisionEvent(other);
+        other.CollisionEvent(this);
     }
 }
