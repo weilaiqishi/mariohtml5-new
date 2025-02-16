@@ -1,3 +1,38 @@
+# mariohtml5-new
+
+The TypeScript version of [mariohtml5](https://github.com/robertkleffner/mariohtml5)
+
+try it mariohtml5-new.vercel.app
+
+Game Control Instructions
+- Left Arrow: Move the character left.
+- Right Arrow: Move the character right.
+- Down Arrow: If the character is in big state, pressing this key will make the character crouch.
+- A key:
+  - Shoot fireballs (if the character is in fire state and there are less than two fireballs on the screen).
+  - Pick up shells (if the character is next to a shell).
+- S key:
+  - Jump (if the character is on the ground and can jump).
+
+-----------------------------------------------------------------------------------------
+
+TypeScript 版本的马里奥游戏
+原仓库 [mariohtml5](https://github.com/robertkleffner/mariohtml5)
+
+试玩 mariohtml5-new.vercel.app
+
+游戏控制说明
+左箭头 (Left Arrow): 向左移动角色。
+右箭头 (Right Arrow): 向右移动角色。
+下箭头 (Down Arrow): 如果角色处于大状态，按下此键可以让角色蹲下。
+A 键:
+发射火球（如果角色处于火焰状态且屏幕上少于两个火球）。
+拾取壳子（如果角色在壳子旁边）。
+S 键:
+跳跃（如果角色在地面上并且可以跳跃）。
+
+## Original project README
+
 This is a clone of Infinite Mario, written in JavaScript for web browsers using HTML5.
 
 A good demonstration of what can be accomplished with the Canvas and Audio elements.
