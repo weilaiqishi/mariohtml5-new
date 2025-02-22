@@ -38,7 +38,7 @@ export class LoseState {
         this.gameOver.X = 112;
         this.gameOver.Y = 68;
 
-        this.font = Mario.SpriteCuts.CreateBlackFont();
+        this.font = Mario.SpriteCuts.CreateWhiteFont();
         this.font.Strings[0] = { String: "Game over!", X: 116, Y: 160 };
 
         this.drawManager.Add(this.font);

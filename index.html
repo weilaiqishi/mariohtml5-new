@@ -60,6 +60,22 @@
                 user-select: none;
                 touch-action: none;
             }
+            
+            @media (orientation: portrait) {
+                canvas {
+				   position: absolute;
+                   top: 10%;
+			    }
+                .action-button {
+                    width: 20vw;
+                    height: 20vw;
+                    font-size: 6vw;
+                }
+                .action-buttons {
+                    right: 4vw;
+                    bottom: 20vh;
+                }
+            }
 		</style>
 	</head>
 	<body>
@@ -96,6 +112,12 @@
                 
                 canvas.style.width = width + 'px';
                 canvas.style.height = height + 'px';
+
+                if (width < 640) {
+                    canvas.style.transform = 'scale(' + (width / 640) + ')';
+                } else {
+                    canvas.style.transform = 'scale(1)';
+                }
             }
 
             window.addEventListener('resize', resizeCanvas);
