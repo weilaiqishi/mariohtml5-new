@@ -11,6 +11,9 @@ importers:
       jquery:
         specifier: ^3.7.1
         version: 3.7.1
+      nipplejs:
+        specifier: ^0.10.2
+        version: 0.10.2
     devDependencies:
       vite:
         specifier: ^6.0.0
@@ -294,6 +297,9 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nipplejs@0.10.2:
+    resolution: {integrity: sha512-XGxFY8C2DOtobf1fK+MXINTzkkXJLjZDDpfQhOUZf4TSytbc9s4bmA0lB9eKKM8iDivdr9NQkO7DpIQfsST+9g==}
+
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
@@ -520,6 +526,8 @@ snapshots:
   jquery@3.7.1: {}
 
   nanoid@3.3.8: {}
+
+  nipplejs@0.10.2: {}
 
   picocolors@1.1.1: {}
 

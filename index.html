@@ -2,27 +2,78 @@
 <html>
 	<head>
 		<title>Infinite Mario - JavaScript</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
 		<style>
+            html {
+                width: 100%;
+                height: 100%;
+            }
 			body {
+                width: 100%;
+                height: 100%;
 				margin: 0;
 				padding: 0;
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				min-height: 100vh;
 				background: #000;
 				overflow: hidden;
 			}
 			canvas {
-				position: absolute;
+				position: relative;
 			}
+            /* 添加移动端控制器样式 */
+            .mobile-controls {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 20vmin;
+                pointer-events: none;
+            }
+            #joystick-area {
+                position: absolute;
+                left: 3vmin;
+                bottom: 3vmin;
+                width: 16vmin;
+                height: 16vmin;
+                pointer-events: auto;
+            }
+            .action-buttons {
+                position: absolute;
+                right: 8vmin;
+                bottom: 8vmin;
+                display: flex;
+                pointer-events: auto;
+            }
+            .action-button {
+                width: 24vmin;
+                height: 24vmin;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.3);
+                border: 0.3vmin solid white;
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 10vmin;
+                user-select: none;
+                touch-action: none;
+            }
 		</style>
 	</head>
 	<body>
 		<canvas id="canvas" width="640" height="480">
 			<p>Your browser does not support the canvas element.</p>
 		</canvas>
+        <!-- 添加移动端控制器 -->
+        <div class="mobile-controls">
+            <div id="joystick-area"></div>
+            <div class="action-buttons">
+                <div class="action-button" id="buttonA" style="position: relative; top: -8vmin;">A</div>
+                <div class="action-button" id="buttonS">S</div>
+            </div>
+        </div>
         <script type="module" src="/src/main.ts"></script>
         <script>
             function resizeCanvas() {
