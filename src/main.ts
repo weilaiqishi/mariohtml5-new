@@ -1,7 +1,7 @@
 // 导入jQuery
 import $ from "jquery";
 import nipplejs, { JoystickManager } from "nipplejs";
-
+import { throttle } from 'es-toolkit'
 // 导入Enjine模块
 import { Enjine } from "./EnjineTs/core";
 
@@ -65,19 +65,23 @@ function init() {
         });
     });
     initializeMobileControls();
-
+    // 监听窗口大小和横竖屏变化
     window.addEventListener("resize", () => {
-        initializeMobileControls()
+        initializeMobileControls();
     });
 }
 
-let joystick: JoystickManager
+let joystick: JoystickManager;
+
+function sleep(time: number) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
 
 // 初始化移动端控制
-function initializeMobileControls() {
+const initializeMobileControls = throttle(async () => {
     if (joystick) {
-        const nipple = joystick.get(0);
-        nipple.destroy();
+        joystick?.destroy()
+        await sleep(66)
     }
 
     const windowWidth = window.innerWidth;
@@ -89,17 +93,16 @@ function initializeMobileControls() {
         position: { left: "24vmin", bottom: "24vmin" },
         color: "white",
         size: Math.round(shortWidth * 0.4),
-    }
+    } as const;
     if (windowWidth < windowHeight) {
         Object.assign(config, {
             position: { left: "16vw", bottom: "24vh" },
             size: Math.round(shortWidth * 0.3),
-        })
+        });
     }
     joystick = nipplejs.create(config);
 
     // 窗口大小改变时更新摇杆大小
-   
 
     // 摇杆控制
     let activeKeys = new Set<number>();
@@ -134,7 +137,7 @@ function initializeMobileControls() {
         }
         activeKeys.clear();
     });
-}
+}, 1000, { edges: ['leading'] });
 
 // 初始化应用
 $(document).ready(function () {

@@ -90,8 +90,8 @@ export var Mario = {
         if (name in this.midiFiles) {
             // Currently we stop all playing tracks when playing a new one
             // MIDIjs can't play multiple at one time
-            //MIDIjs.stop();
-            //MIDIjs.play(this.midiFiles[name]);
+            window.MIDIjs.stop();
+            window.MIDIjs.play(this.midiFiles[name]);
         } else {
             console.error("Cannot play music track " + name + " as i have no data for it.");
         }

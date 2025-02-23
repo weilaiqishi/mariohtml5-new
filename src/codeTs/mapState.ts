@@ -248,8 +248,20 @@ export class MapState extends GameState {
             }
         }
 
+        // this.cheat()
+
         return true;
     }
+
+    cheat() {
+        this.XMario = this.XFarthestCap * 16;
+        this.YMario = this.YFarthestCap * 16;
+        this.WorldNumber = 7
+    }
+    cheat2() {
+        Mario.Character?.GetMushroom();
+        Mario.Character?.GetFlower();
+    } 
 
     FindConnection(width, height) {
         let x = 0,

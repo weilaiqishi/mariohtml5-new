@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      es-toolkit:
+        specifier: ^1.32.0
+        version: 1.32.0
       jquery:
         specifier: ^3.7.1
         version: 3.7.1
@@ -279,6 +282,9 @@ packages:
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
 
+  es-toolkit@1.32.0:
+    resolution: {integrity: sha512-ZfSfHP1l6ubgW/B/FRtqb9bYdMvI6jizbOSfbwwJNcOQ1QE6TFsC3jpQkZ900uUPSR3t3SU5Ds7UWKnYz+uP8Q==}
+
   esbuild@0.24.2:
     resolution: {integrity: sha512-+9egpBW8I3CD5XPe0n6BfT5fxLzxrlDzqydF3aviG+9ni1lDC/OvMHcxqEFV0+LANZG5R1bFMWfUrjVsdwxJvA==}
     engines: {node: '>=18'}
@@ -491,6 +497,8 @@ snapshots:
     optional: true
 
   '@types/estree@1.0.6': {}
+
+  es-toolkit@1.32.0: {}
 
   esbuild@0.24.2:
     optionalDependencies:

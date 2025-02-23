@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>Infinite Mario - JavaScript</title>
-		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
 		<style>
             html {
                 width: 100%;
@@ -21,6 +21,8 @@
 			}
 			canvas {
 				position: relative;
+                width: 0;
+                height: 0;
 			}
             /* 添加移动端控制器样式 */
             .mobile-controls {
@@ -77,6 +79,7 @@
                 }
             }
 		</style>
+        <script type='text/javascript' src='https://www.midijs.net/lib/midi.js'></script>
 	</head>
 	<body>
 		<canvas id="canvas" width="640" height="480">
@@ -112,12 +115,6 @@
                 
                 canvas.style.width = width + 'px';
                 canvas.style.height = height + 'px';
-
-                if (width < 640) {
-                    canvas.style.transform = 'scale(' + (width / 640) + ')';
-                } else {
-                    canvas.style.transform = 'scale(1)';
-                }
             }
 
             window.addEventListener('resize', resizeCanvas);
