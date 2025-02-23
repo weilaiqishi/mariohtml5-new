@@ -7,12 +7,11 @@ try it mariohtml5-new.vercel.app
 Game Control Instructions
 - Left Arrow: Move the character left.
 - Right Arrow: Move the character right.
-- Down Arrow: If the character is in big state, pressing this key will make the character crouch.
+- Down Arrow: Pressing this key will make the character crouch.
 - A key:
-  - Shoot fireballs (if the character is in fire state and there are less than two fireballs on the screen).
-  - Pick up shells (if the character is next to a shell).
+  - Shoot fireballs.
 - S key:
-  - Jump (if the character is on the ground and can jump).
+  - Jump.
 
 -----------------------------------------------------------------------------------------
 
@@ -24,12 +23,11 @@ TypeScript 版本的马里奥游戏
 游戏控制说明
 左箭头 (Left Arrow): 向左移动角色。
 右箭头 (Right Arrow): 向右移动角色。
-下箭头 (Down Arrow): 如果角色处于大状态，按下此键可以让角色蹲下。
+下箭头 (Down Arrow): 按下此键可以让角色蹲下。
 A 键:
-发射火球（如果角色处于火焰状态且屏幕上少于两个火球）。
-拾取壳子（如果角色在壳子旁边）。
+发射火球
 S 键:
-跳跃（如果角色在地面上并且可以跳跃）。
+跳跃
 
 ## Original project README
 
