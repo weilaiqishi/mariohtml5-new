@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      bowser:
+        specifier: ^2.11.0
+        version: 2.11.0
       es-toolkit:
         specifier: ^1.32.0
         version: 1.32.0
@@ -282,6 +285,9 @@ packages:
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
 
+  bowser@2.11.0:
+    resolution: {integrity: sha512-AlcaJBi/pqqJBIQ8U9Mcpc9i8Aqxn88Skv5d+xBX006BY5u8N3mGLHa5Lgppa7L/HfwgwLgZ6NYs+Ag6uUmJRA==}
+
   es-toolkit@1.32.0:
     resolution: {integrity: sha512-ZfSfHP1l6ubgW/B/FRtqb9bYdMvI6jizbOSfbwwJNcOQ1QE6TFsC3jpQkZ900uUPSR3t3SU5Ds7UWKnYz+uP8Q==}
 
@@ -497,6 +503,8 @@ snapshots:
     optional: true
 
   '@types/estree@1.0.6': {}
+
+  bowser@2.11.0: {}
 
   es-toolkit@1.32.0: {}
 

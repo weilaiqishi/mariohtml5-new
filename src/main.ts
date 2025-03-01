@@ -1,7 +1,7 @@
 // 导入jQuery
 import $ from "jquery";
 import nipplejs, { JoystickManager } from "nipplejs";
-import { throttle } from 'es-toolkit'
+import { throttle } from "es-toolkit";
 // 导入Enjine模块
 import { Enjine } from "./EnjineTs/core";
 
@@ -37,6 +37,7 @@ import "./codeTs/mapState.ts";
 import "./codeTs/levelState.ts";
 
 import { Mario } from "./codeTs/setup.ts";
+import Bowser from "bowser";
 
 // 模拟按键事件
 function simulateKey(keyCode: number, isDown: boolean) {
@@ -49,6 +50,28 @@ function simulateKey(keyCode: number, isDown: boolean) {
 }
 
 function init() {
+    // 使用 bowser 检测设备类型
+    function detectDevice() {
+        const parser = Bowser.getParser(window.navigator.userAgent);
+        const isDesktop = parser.getPlatformType() === "desktop";
+
+        // 获取移动控制器元素
+        const mobileControls = document.querySelector<HTMLBaseElement>(".mobile-controls");
+        const joystickArea = document.getElementById("joystick-area");
+
+        if (mobileControls && joystickArea) {
+            if (isDesktop) {
+                // 桌面设备，隐藏控制器
+                mobileControls.style.display = "none";
+            } else {
+                // 移动设备，显示控制器
+                mobileControls.style.display = "block";
+                joystickArea.style.display = "block";
+            }
+        }
+    }
+    detectDevice();
+
     // 添加虚拟按钮事件
     ["buttonA", "buttonS"].forEach((id) => {
         const button = document.getElementById(id);
@@ -78,66 +101,70 @@ function sleep(time: number) {
 }
 
 // 初始化移动端控制
-const initializeMobileControls = throttle(async () => {
-    if (joystick) {
-        joystick?.destroy()
-        await sleep(66)
-    }
+const initializeMobileControls = throttle(
+    async () => {
+        if (joystick) {
+            joystick?.destroy();
+            await sleep(66);
+        }
 
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-    const shortWidth = windowWidth < windowHeight ? windowWidth : windowHeight;
-    const config = {
-        zone: document.getElementById("joystick-area"),
-        mode: "static",
-        position: { left: "24vmin", bottom: "24vmin" },
-        color: "white",
-        size: Math.round(shortWidth * 0.4),
-    } as const;
-    if (windowWidth < windowHeight) {
-        Object.assign(config, {
-            position: { left: "16vw", bottom: "24vh" },
-            size: Math.round(shortWidth * 0.3),
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        const shortWidth = windowWidth < windowHeight ? windowWidth : windowHeight;
+        const config = {
+            zone: document.getElementById("joystick-area"),
+            mode: "static",
+            position: { left: "24vmin", bottom: "24vmin" },
+            color: "white",
+            size: Math.round(shortWidth * 0.4),
+        } as const;
+        if (windowWidth < windowHeight) {
+            Object.assign(config, {
+                position: { left: "16vw", bottom: "24vh" },
+                size: Math.round(shortWidth * 0.3),
+            });
+        }
+        joystick = nipplejs.create(config);
+
+        // 窗口大小改变时更新摇杆大小
+
+        // 摇杆控制
+        let activeKeys = new Set<number>();
+        joystick.on("move", (evt: any, data: any) => {
+            const angle = data.angle.degree;
+            const newKeys = new Set<number>();
+
+            if (angle > 45 && angle < 135) newKeys.add(38); // Up
+            if (angle > 135 && angle < 225) newKeys.add(37); // Left
+            if (angle > 225 && angle < 315) newKeys.add(40); // Down
+            if (angle < 45 || angle > 315) newKeys.add(39); // Right
+
+            // 释放不再激活的按键
+            for (const key of activeKeys) {
+                if (!newKeys.has(key)) {
+                    simulateKey(key, false);
+                }
+            }
+            // 按下新激活的按键
+            for (const key of newKeys) {
+                if (!activeKeys.has(key)) {
+                    simulateKey(key, true);
+                }
+            }
+            activeKeys = newKeys;
         });
-    }
-    joystick = nipplejs.create(config);
 
-    // 窗口大小改变时更新摇杆大小
-
-    // 摇杆控制
-    let activeKeys = new Set<number>();
-    joystick.on("move", (evt: any, data: any) => {
-        const angle = data.angle.degree;
-        const newKeys = new Set<number>();
-
-        if (angle > 45 && angle < 135) newKeys.add(38); // Up
-        if (angle > 135 && angle < 225) newKeys.add(37); // Left
-        if (angle > 225 && angle < 315) newKeys.add(40); // Down
-        if (angle < 45 || angle > 315) newKeys.add(39); // Right
-
-        // 释放不再激活的按键
-        for (const key of activeKeys) {
-            if (!newKeys.has(key)) {
+        joystick.on("end", () => {
+            // 释放所有按键
+            for (const key of activeKeys) {
                 simulateKey(key, false);
             }
-        }
-        // 按下新激活的按键
-        for (const key of newKeys) {
-            if (!activeKeys.has(key)) {
-                simulateKey(key, true);
-            }
-        }
-        activeKeys = newKeys;
-    });
-
-    joystick.on("end", () => {
-        // 释放所有按键
-        for (const key of activeKeys) {
-            simulateKey(key, false);
-        }
-        activeKeys.clear();
-    });
-}, 1000, { edges: ['leading'] });
+            activeKeys.clear();
+        });
+    },
+    1000,
+    { edges: ["leading"] }
+);
 
 // 初始化应用
 $(document).ready(function () {

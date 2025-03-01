@@ -32,6 +32,7 @@
                 right: 0;
                 height: 20vmin;
                 pointer-events: none;
+                display: none; /* 默认隐藏 */
             }
             #joystick-area {
                 position: absolute;
@@ -40,6 +41,7 @@
                 width: 16vmin;
                 height: 16vmin;
                 pointer-events: auto;
+                display: none;
             }
             .action-buttons {
                 position: absolute;
@@ -80,6 +82,9 @@
             }
 		</style>
         <script type='text/javascript' src='https://www.midijs.net/lib/midi.js'></script>
+        <!-- 添加 eruda 调试工具 -->
+        <!-- <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+        <script>eruda.init();</script> -->
 	</head>
 	<body>
 		<canvas id="canvas" width="640" height="480">
