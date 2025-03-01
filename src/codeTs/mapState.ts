@@ -259,8 +259,9 @@ export class MapState extends GameState {
         this.WorldNumber = 7
     }
     cheat2() {
-        Mario.Character?.GetMushroom();
-        Mario.Character?.GetFlower();
+        Mario.MarioCharacter?.GetMushroom();
+        Mario.MarioCharacter?.GetFlower();
+        Mario.MarioCharacter.GetHurt = () => {}
     } 
 
     FindConnection(width, height) {
@@ -533,6 +534,9 @@ export class MapState extends GameState {
             this.YMarioA = 0;
 
             if (this.CanEnterLevel && Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.S)) {
+                // setTimeout(() => {
+                //     this.cheat2()
+                // }, 1000)
                 if (this.Level[x][y] === Mario.MapTile.Level && this.Data[x][y] !== -11) {
                     if (this.Level[x][y] === Mario.MapTile.Level && this.Data[x][y] !== 0 && this.Data[x][y] > -10) {
                         difficulty = this.WorldNumber + 1;
@@ -595,6 +599,7 @@ export class MapState extends GameState {
             this.LargeMario.Y = this.YMario + ((this.YMarioA * delta) | 0) - 22;
             this.LargeMario.Update(delta);
         }
+
     }
 
     TryWalking(xd: number, yd: number) {
